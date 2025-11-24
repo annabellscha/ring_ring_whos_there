@@ -1,0 +1,39 @@
+# Web Framework
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+python-multipart>=0.0.20
+
+# Ring API Integration (unofficial)
+ring-doorbell>=0.8.5
+
+# Text-to-Speech and Speech-to-Text
+elevenlabs>=1.0.0
+
+# Fuzzy Matching
+rapidfuzz>=3.10.0
+jellyfish>=1.1.0
+
+# Tracing & Monitoring
+langfuse>=2.50.0
+
+# Configuration
+python-dotenv>=1.0.0
+pydantic>=2.10.0
+pydantic-settings>=2.7.0
+
+# Audio Processing
+pydub==0.25.1
+
+# HTTP Client
+aiohttp==3.9.1
+httpx==0.26.0
+
+# Utilities
+python-dateutil==2.8.2
+
+# Development & Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3
+pytest-mock==3.12.0
+black==24.1.1
+ruff==0.1.14
