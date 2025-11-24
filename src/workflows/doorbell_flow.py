@@ -69,8 +69,11 @@ class DoorbellFlowOrchestrator:
         logger.info(f"🔔 Doorbell event started for device: {device_id}")
 
         # Create Langfuse trace for this doorbell event
+        trace_id = f"doorbell_{device_id}_{int(time.time())}"
         trace = langfuse.trace(
+            id=trace_id,
             name="doorbell_authentication",
+            input={"device_id": device_id},
             metadata={
                 "device_id": device_id,
                 "timestamp": time.time(),
@@ -146,7 +149,6 @@ class DoorbellFlowOrchestrator:
                     trace.update(
                         output=result,
                         metadata={
-                            **trace.get_trace_metadata(),
                             "status": "success",
                             "attempts": session.attempts,
                             "duration_ms": round((time.time() - session.start_time) * 1000, 2)
