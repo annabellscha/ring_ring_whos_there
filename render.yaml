@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: ring-ring-whos-there
+    env: docker
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    envVars:
+      - key: RING_USERNAME
+        sync: false
+      - key: RING_PASSWORD
+        sync: false
+      - key: RING_2FA_TOKEN
+        sync: false
+      - key: ELEVENLABS_API_KEY
+        sync: false
+      - key: ELEVENLABS_VOICE_ID
+        sync: false
+      - key: LANGFUSE_PUBLIC_KEY
+        sync: false
+      - key: LANGFUSE_SECRET_KEY
+        sync: false
+      - key: LANGFUSE_HOST
+        value: https://cloud.langfuse.com
+      - key: PASSWORDS
+        value: alohomora,mellon,friend,simsalabim
+      - key: FUZZY_THRESHOLD
+        value: 80
+      - key: RECORDING_DURATION
+        value: 8
+      - key: MAX_ATTEMPTS
+        value: 3
+      - key: ENVIRONMENT
+        value: production
+      - key: LOG_LEVEL
+        value: INFO

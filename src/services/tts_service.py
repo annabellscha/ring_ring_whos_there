@@ -1,6 +1,21 @@
 """
 Text-to-Speech service using ElevenLabs API.
-Generates witch voice audio for doorbell responses.
+
+This module provides functionality to generate audio files from text using
+ElevenLabs' multilingual TTS API. The service is configured to use a specific
+witch voice for doorbell responses, creating an immersive authentication
+experience.
+
+Example:
+    ```python
+    from src.services.tts_service import tts_service
+    
+    await tts_service.generate_audio("Passwort?", "output.mp3")
+    ```
+
+Note:
+    The service uses the "eleven_multilingual_v2" model which supports
+    multiple languages including German and English.
 """
 
 from elevenlabs.client import ElevenLabs
@@ -13,22 +28,68 @@ logger = logging.getLogger(__name__)
 
 
 class TTSService:
-    """Text-to-Speech service for generating witch voice audio."""
+    """
+    Text-to-Speech service for generating witch voice audio.
+    
+    This service converts text strings into audio files using ElevenLabs'
+    text-to-speech API. It's configured with a specific voice ID to maintain
+    consistent character voice across all doorbell interactions.
+    
+    Attributes:
+        client (ElevenLabs): The ElevenLabs API client instance.
+        voice_id (str): The voice ID to use for speech generation.
+    """
 
     def __init__(self, voice_id: str = None):
+        """
+        Initialize the TTS service with ElevenLabs API credentials.
+        
+        Args:
+            voice_id: Optional voice ID to override the default from settings.
+                If not provided, uses the voice ID from configuration.
+        
+        Raises:
+            ValueError: If ElevenLabs API key is not configured.
+        """
         self.client = ElevenLabs(api_key=settings.elevenlabs_api_key)
         self.voice_id = voice_id or settings.elevenlabs_voice_id
 
     async def generate_audio(self, text: str, output_path: str) -> str:
         """
-        Generate audio from text using ElevenLabs.
+        Generate audio from text using ElevenLabs TTS API.
+
+        Converts the provided text into speech using the configured witch voice
+        and saves it as an audio file. The output directory is created
+        automatically if it doesn't exist.
 
         Args:
-            text: The text to convert to speech
-            output_path: Path where the audio file should be saved
+            text: The text to convert to speech. Can be in any language
+                supported by the multilingual model (e.g., German, English).
+            output_path: Path where the generated audio file should be saved.
+                The file format is determined by the extension (typically .mp3).
+                Parent directories will be created if they don't exist.
 
         Returns:
-            Path to the generated audio file
+            The absolute path to the generated audio file as a string.
+
+        Raises:
+            ValueError: If the text is empty or output_path is invalid.
+            PermissionError: If the output directory cannot be created or
+                the file cannot be written.
+            Exception: If the ElevenLabs API call fails.
+
+        Example:
+            ```python
+            audio_path = await tts_service.generate_audio(
+                "Passwort?", 
+                "audio_assets/witch_password.mp3"
+            )
+            # audio_path: "/path/to/audio_assets/witch_password.mp3"
+            ```
+
+        Note:
+            Uses the "eleven_multilingual_v2" model which supports multiple
+            languages. The audio is streamed in chunks and written to disk.
         """
         logger.info(f"Generating audio for text: {text}")
 
